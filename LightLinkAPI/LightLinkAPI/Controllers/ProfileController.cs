@@ -1,11 +1,25 @@
-﻿using System;
+﻿using LightLinkLibrary.Data_Access;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LightLinkAPI.Controllers
 {
-    public class ProfileController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProfileController: ControllerBase
     {
+        public IUserService UserService { get; private set; }
+        public IProfileService ProfileService { get; private set; }
+        public IComputerService ComputerService { get; private set; }
+
+        public ProfileController(IUserService userService, IProfileService profileService, IComputerService computerService)
+        {
+            UserService = userService;
+            ProfileService = profileService;
+            ComputerService = computerService;
+        }
     }
 }

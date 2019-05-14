@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using LightLinkLibrary.Data_Access.Implementations;
 using LightLinkModels;
@@ -12,7 +13,7 @@ namespace LightLinkLibraryTests
         [TestMethod]
         public void GiveUserIfUserExists()
         {
-            SeedDatabase("joe");
+            AddUserToDatabase("joe");
             var sut = new MongoSuperService();
             var actual = sut.GetUserById("joe");
             actual.Should().NotBeNull(because: "User is in the database.");
@@ -28,14 +29,29 @@ namespace LightLinkLibraryTests
             actual.Should().BeNull(because: "User does not exist.");
         }
 
-        private void SeedDatabase(string person)
+        [TestMethod]
+        public void GiveAllTheProfilesForUsers()
+        {  
+            var collection = new Profile[] { new Profile { Name  = "The Very Best Shit." } };
+            AddUserToDatabase("alex", values: collection);
+            var sut = new MongoSuperService();
+            var actual = sut.GetProfilesForUser("alex");
+            actual.Should().BeEquivalentTo(collection);
+        }
+
+
+        private void AddUserToDatabase(string username,string password = "Not A God", params Profile[] values)
         {
             var sut = new MongoSuperService();
-            sut.AddUser(new User()
+            if (sut.GetAllUsers().Any(c => c.UserName == username))
             {
-                UserName = person,
-                Password = "Not A GOD"
-            });
+                sut.AddUser(new User()
+                {
+                    UserName = username,
+                    Password = password,
+                    Profiles = values
+                });
+            }
         }
     }
 }
