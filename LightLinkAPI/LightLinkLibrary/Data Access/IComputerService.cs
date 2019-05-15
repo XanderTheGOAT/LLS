@@ -10,7 +10,7 @@ namespace LightLinkLibrary.Data_Access
         IEnumerable<Computer> GetAllUnAssignedComputers();
         IEnumerable<Computer> GetAllComputers();
         void AddComputer(Computer dto);
-        void RemoveComputer(Computer dto);
-        void UpdateComputer(Computer dto, string computerName);
+        void RemoveComputer(string computerName);
+        void UpdateComputer(string computerName, Computer dto);
     }
 }

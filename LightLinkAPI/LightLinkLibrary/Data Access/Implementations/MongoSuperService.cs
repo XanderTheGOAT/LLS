@@ -5,7 +5,7 @@ using LightLinkModels;
 
 namespace LightLinkLibrary.Data_Access.Implementations
 {
-    public class MongoSuperService : IComputerService, IUserService, IProfileService
+    public class MongoSuperService : IComputerService, IProfileService, IUserService
     {
         public void AddComputer(Computer dto)
         {
@@ -22,7 +22,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
             throw new NotImplementedException();
         }
 
-        public User DeleteUser(User dto)
+        public void DeleteUser(string id)
         {
             throw new NotImplementedException();
         }
@@ -52,11 +52,6 @@ namespace LightLinkLibrary.Data_Access.Implementations
             throw new NotImplementedException();
         }
 
-        public Profile GetProfileByName(string username, string name)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Profile> GetProfilesForUser(string username)
         {
             throw new NotImplementedException();
@@ -67,17 +62,17 @@ namespace LightLinkLibrary.Data_Access.Implementations
             throw new NotImplementedException();
         }
 
-        public void RemoveComputer(Computer dto)
+        public void RemoveComputer(string computerName)
         {
             throw new NotImplementedException();
         }
 
-        public Profile RemoveProfileFromUser(string username, Profile dto)
+        public void RemoveProfileFromUser(string username, string name)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateComputer(Computer dto, string computerName)
+        public void UpdateComputer(string computerName, Computer dto)
         {
             throw new NotImplementedException();
         }

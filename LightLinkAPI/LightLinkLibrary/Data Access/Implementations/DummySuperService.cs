@@ -39,10 +39,10 @@ namespace LightLinkLibrary.Data_Access.Implementations
             users.Add(dto);
         }
 
-        public User DeleteUser(User dto)
+        public void DeleteUser(string username)
         {
-            users.Remove(dto);
-            return dto;
+            
+            users.Remove(new User { UserName = username });
         }
 
         public IEnumerable<Computer> GetAllComputers()
@@ -70,11 +70,6 @@ namespace LightLinkLibrary.Data_Access.Implementations
             return computers.Where(c => c.UserName == username);
         }
 
-        public Profile GetProfileByName(string username, string name)
-        {
-            return GetProfilesForUser(username)?.FirstOrDefault(p => p.Name == name);
-        }
-
         public IEnumerable<Profile> GetProfilesForUser(string username)
         {
             return GetUserById(username)?.Profiles;
@@ -85,18 +80,17 @@ namespace LightLinkLibrary.Data_Access.Implementations
             return users.FirstOrDefault(u => u.UserName == id);
         }
 
-        public void RemoveComputer(Computer dto)
+        public void RemoveComputer(string name)
         {
-            computers.Remove(dto);
+            computers.Remove(new Computer { Name = name });
         }
 
-        public Profile RemoveProfileFromUser(string username, Profile dto)
+        public void RemoveProfileFromUser(string username, string name)
         {
-            GetUserById(username)?.Profiles?.Remove(dto);
-            return dto;
+            GetUserById(username).Profiles?.Remove(new Profile { Name = name });
         }
 
-        public void UpdateComputer(Computer dto, string computerName)
+        public void UpdateComputer(string computerName, Computer dto)
         {
             var remove = GetAllComputers().FirstOrDefault(c => c.Name == computerName);
             computers.Remove(remove);

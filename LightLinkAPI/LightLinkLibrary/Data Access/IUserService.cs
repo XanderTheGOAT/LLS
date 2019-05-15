@@ -8,7 +8,7 @@ namespace LightLinkLibrary.Data_Access
         User GetUserById(string id);
         IEnumerable<User> GetAllUsers();
         void AddUser(User dto);
-        User DeleteUser(User dto);
+        void DeleteUser(string id);
         void UpdateUser(string id, User dto);
     }
 }

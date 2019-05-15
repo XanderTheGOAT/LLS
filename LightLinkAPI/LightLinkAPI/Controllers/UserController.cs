@@ -1,4 +1,5 @@
 ﻿using LightLinkLibrary.Data_Access;
+using LightLinkModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,44 @@ namespace LightLinkAPI.Controllers
     public class UserController: ControllerBase
     {
         public IUserService UserService { get; private set; }
-        public IProfileService ProfileService { get; private set; }
-        public IComputerService ComputerService { get; private set; }
 
-        public UserController(IUserService userService, IProfileService profileService, IComputerService computerService)
+        public UserController(IUserService userService)
         {
             UserService = userService;
-            ProfileService = profileService;
-            ComputerService = computerService;
+        }
+        // GET api/User
+        [HttpGet]
+        public IEnumerable<User> Get()
+        {
+            return UserService.GetAllUsers();
+        }
+
+        // GET api/values/5
+        [HttpGet("{username}")]
+        public User Get(string username)
+        {
+            return UserService.GetUserById(username);
+        }
+
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody] User value)
+        {
+            UserService.AddUser(value);
+        }
+
+        // PUT api/values/5
+        [HttpPut("{username}")]
+        public void Put(string username, [FromBody] User value)
+        {
+            UserService.UpdateUser(username, value);
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{username}")]
+        public void Delete(string username)
+        {
+            UserService.DeleteUser(username);
         }
     }
 }
