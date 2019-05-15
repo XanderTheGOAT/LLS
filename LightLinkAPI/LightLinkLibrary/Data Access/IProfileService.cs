@@ -9,5 +9,6 @@ namespace LightLinkLibrary.Data_Access
         void AddProfileToUser(string username, Profile dto);
         void RemoveProfileFromUser(string username, string name);
         void UpdateProfileOnUser(string username, string name, Profile dto);
+        bool Exists(string username, string name);
     }
 }

@@ -20,37 +20,48 @@ namespace LightLinkAPI.Controllers
         }
         // GET api/User
         [HttpGet]
-        public IEnumerable<User> Get()
+        public ActionResult Get()
         {
-            return UserService.GetAllUsers();
+            return Ok(UserService.GetAllUsers());
         }
 
         // GET api/values/5
         [HttpGet("{username}")]
-        public User Get(string username)
+        public ActionResult Get(string username)
         {
-            return UserService.GetUserById(username);
+            var user = UserService.GetUserById(username);
+            if (user is null) return NotFound();
+            return Ok(user);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] User value)
+        public ActionResult Post([FromBody] User value)
         {
+            if (value is null)
+            {
+                return BadRequest();
+            }
             UserService.AddUser(value);
+            return Ok();
         }
 
         // PUT api/values/5
         [HttpPut("{username}")]
-        public void Put(string username, [FromBody] User value)
+        public ActionResult Put(string username, [FromBody] User value)
         {
+            if (!UserService.Exists(username)) return BadRequest(new { error="no user exists by that name." });
             UserService.UpdateUser(username, value);
+            return Ok();
         }
 
         // DELETE api/values/5
         [HttpDelete("{username}")]
-        public void Delete(string username)
+        public ActionResult Delete(string username)
         {
+            if (!UserService.Exists(username)) return BadRequest(new { error = "no user exists by that name." });
             UserService.DeleteUser(username);
+            return Ok();
         }
     }
 }

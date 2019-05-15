@@ -27,6 +27,21 @@ namespace LightLinkLibrary.Data_Access.Implementations
             throw new NotImplementedException();
         }
 
+        public bool Exist(string computername)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(string username, string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Computer> GetAllComputers()
         {
             throw new NotImplementedException();

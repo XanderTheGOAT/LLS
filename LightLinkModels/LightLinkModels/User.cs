@@ -4,11 +4,19 @@ using System.Collections.Generic;
 
 namespace LightLinkModels
 {
-    public class User: IEquatable<User>
+    public class User : IEquatable<User>
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        private string userName;
+        private string password;
+
+        public string UserName { get => userName ?? ""; set => userName = value; }
+        public string Password { get => password ?? ""; set => password = value; }
         public ICollection<Profile> Profiles { get; set; }
+
+        public User()
+        {
+            Profiles = new List<Profile>();
+        }
 
         public override bool Equals(object obj)
         {

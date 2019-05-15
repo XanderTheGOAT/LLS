@@ -6,8 +6,16 @@ namespace LightLinkModels
 {
     public class Profile: IEquatable<Profile>
     {
-        public string Name;
-        public Dictionary<string, dynamic> Configurations;
+        private string name;
+
+        public string Name { get => name ?? ""; set => name = value; }
+        public IDictionary<string, dynamic> Configurations { get; set; }
+
+        public Profile()
+        {
+            Configurations = new Dictionary<string, dynamic>();
+        }
+
         public override bool Equals(object obj)
         {
             bool isEqual = false;

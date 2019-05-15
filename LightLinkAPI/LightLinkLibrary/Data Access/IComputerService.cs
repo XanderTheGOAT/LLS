@@ -12,5 +12,6 @@ namespace LightLinkLibrary.Data_Access
         void AddComputer(Computer dto);
         void RemoveComputer(string computerName);
         void UpdateComputer(string computerName, Computer dto);
+        bool Exist(string computername);
     }
 }

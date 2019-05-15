@@ -24,30 +24,39 @@ namespace LightLinkAPI.Controllers
 
         // GET api/Profile/username/
         [HttpGet("{username}")]
-        public IEnumerable<Profile> Get(string username)
+        public ActionResult Get(string username)
         {
-            return ProfileService.GetProfilesForUser(username);
+            if (!UserService.Exists(username)) return NotFound();
+            return Ok(ProfileService.GetProfilesForUser(username));
         }
 
         // POST api/values
         [HttpPost("{username}")]
-        public void Post(string username, [FromBody] Profile value)
+        public ActionResult Post(string username, [FromBody] Profile value)
         {
+            if (!UserService.Exists(username)) return BadRequest(new { error = "user by that username was not found." });
             ProfileService.AddProfileToUser(username, value);
+            return Ok();
         }
 
         // PUT api/values/username
         [HttpPut("{username}/{name}")]
-        public void Put(string username, string name, [FromBody] Profile value)
+        public ActionResult Put(string username, string name, [FromBody] Profile value)
         {
+            if (!UserService.Exists(username)) return BadRequest(new { error = "user by that username was not found." });
+            if (!ProfileService.Exists(username, name)) return BadRequest(new { error = "profile not found on user." });
             ProfileService.UpdateProfileOnUser(username, name, value);
+            return Ok();
         }
 
         // DELETE api/values/5
         [HttpDelete("{username}/{name}")]
-        public void Delete(string username, string name)
+        public ActionResult Delete(string username, string name)
         {
+            if (!UserService.Exists(username)) return BadRequest(new { error = "user by that username was not found."});
+            if (!ProfileService.Exists(username, name)) return BadRequest(new { error = "profile not found on user." });
             ProfileService.RemoveProfileFromUser(username, name);
+            return Ok();
         }
     }
 }

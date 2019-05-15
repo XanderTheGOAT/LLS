@@ -10,5 +10,6 @@ namespace LightLinkLibrary.Data_Access
         void AddUser(User dto);
         void DeleteUser(string id);
         void UpdateUser(string id, User dto);
+        bool Exists(string username);
     }
 }

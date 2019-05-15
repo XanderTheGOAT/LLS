@@ -1,5 +1,6 @@
 ﻿using LightLinkModels;
 using LightLinkModels.Comparers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,8 +17,18 @@ namespace LightLinkLibrary.Data_Access.Implementations
             computers = new HashSet<Computer>(new ComputerEqualityComparer());
             profiles = new List<Profile>();
             users = new HashSet<User>();
+            SeedDummyData();
         }
 
+        private void SeedDummyData()
+        {
+            var profile = new Profile
+            {
+                Name = "Dummy"
+            };
+            users.Add(new User { UserName = "Null" });
+            users.Add(new User { UserName = "gxldcptrick", Profiles = new List<Profile> { profile } });
+        }
 
         public void AddComputer(Computer dto)
         {
@@ -110,6 +121,21 @@ namespace LightLinkLibrary.Data_Access.Implementations
             var remove = users.FirstOrDefault(u => u.UserName == id);
             users.Remove(remove);
             users.Add(dto);
+        }
+
+        public bool Exists(string username)
+        {
+            return users.Any(u => u.UserName == username);
+        }
+
+        public bool Exists(string username, string name)
+        {
+            return GetUserById(username).Profiles.Any(p => p.Name == name);
+        }
+
+        public bool Exist(string computername)
+        {
+            return computers.Any(c => c.Name == computername);
         }
     }
 }
