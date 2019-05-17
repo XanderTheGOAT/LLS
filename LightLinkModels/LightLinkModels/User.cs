@@ -1,4 +1,5 @@
 ﻿using LightLinkModels.Extension_Methods;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace LightLinkModels
         private string userName;
         private string password;
 
+        public ObjectId Id { get; set; }
         public string UserName { get => userName ?? ""; set => userName = value; }
         public string Password { get => password ?? ""; set => password = value; }
         public ICollection<Profile> Profiles { get; set; }

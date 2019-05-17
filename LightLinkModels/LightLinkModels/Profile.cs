@@ -1,4 +1,5 @@
 ﻿using LightLinkModels.Extension_Methods;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace LightLinkModels
     {
         private string name;
 
+        public ObjectId Id { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
         public IDictionary<string, dynamic> Configurations { get; set; }
 

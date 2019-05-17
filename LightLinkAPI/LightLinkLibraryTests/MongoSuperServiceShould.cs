@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using LightLinkLibrary.Data_Access.Implementations;
@@ -10,6 +11,56 @@ namespace LightLinkLibraryTests
     [TestClass]
     public class MongoSuperServiceShould
     {
+        //[TestMethod]
+        public void TestAddComputer()
+        {
+            Computer c = new Computer();
+            c.Name = "Cotton Eye Joe";
+            c.UserName = "Joe";
+            c.ConnectedDevices = new string[] { "Beep", "Boop" };
+
+            MongoSuperService mss = new MongoSuperService();
+            mss.AddComputer(c);
+        }
+
+        //[TestMethod]
+        public void TestAddUser()
+        {
+            User u = new User();
+            u.UserName = "Ben";
+            u.Password = "BenIsGreat";
+            u.Profiles = new List<Profile>();
+
+            MongoSuperService mss = new MongoSuperService();
+            mss.AddUser(u);
+        }
+
+        //[TestMethod]
+        public void TestAddProfileToUser()
+        {
+            Profile p = new Profile();
+            p.Name = "Rainbow";
+            p.Configurations = new Dictionary<string, dynamic>();
+            p.Configurations.Add("color", "red");
+
+            MongoSuperService mss = new MongoSuperService();
+            mss.AddProfileToUser("Ben", p);
+        }
+
+        [TestMethod]
+        public void TestBenExists()
+        {
+            MongoSuperService mss = new MongoSuperService();
+            Assert.IsTrue(mss.Exists("Ben"));
+        }
+
+        [TestMethod]
+        public void TestJohnDoesNotExist()
+        {
+            MongoSuperService mss = new MongoSuperService();
+            Assert.IsFalse(mss.Exists("John"));
+        }
+
         [TestMethod]
         public void GiveUserIfUserExists()
         {
@@ -43,7 +94,7 @@ namespace LightLinkLibraryTests
         private void AddUserToDatabase(string username,string password = "Not A God", params Profile[] values)
         {
             var sut = new MongoSuperService();
-            if (sut.GetAllUsers().Any(c => c.UserName == username))
+            if (!sut.GetAllUsers().Any(c => c.UserName == username))
             {
                 sut.AddUser(new User()
                 {
