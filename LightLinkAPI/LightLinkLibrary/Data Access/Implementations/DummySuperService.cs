@@ -17,17 +17,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
             computers = new HashSet<Computer>(new ComputerEqualityComparer());
             profiles = new List<Profile>();
             users = new HashSet<User>();
-            SeedDummyData();
-        }
-
-        private void SeedDummyData()
-        {
-            var profile = new Profile
-            {
-                Name = "Dummy"
-            };
-            users.Add(new User { UserName = "Null" });
-            users.Add(new User { UserName = "gxldcptrick", Profiles = new List<Profile> { profile } });
+            
         }
 
         public void AddComputer(Computer dto)

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using LightLinkLibrary.Data_Access;
 using LightLinkLibrary.Data_Access.Implementations;
+using LightLinkLibrary.Data_Access.Implementations.Decorators;
+using LightLinkModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 
 namespace LightLinkAPI
 {
@@ -29,9 +32,27 @@ namespace LightLinkAPI
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            services.AddSingleton<IUserService>((c) => new DummySuperService());
-            services.AddSingleton<IProfileService>((c) => new DummySuperService());
-            services.AddSingleton<IComputerService>((c) => new DummySuperService());
+            var service = new DummySuperService();
+            var userService = new HashingUserService(service);
+            services.AddSingleton<IUserService>((c) => userService);
+            services.AddSingleton<IProfileService>((c) => service);
+            services.AddSingleton<IComputerService>((c) => service);
+            SeedUsers(userService);
+        }
+
+        private void SeedUsers(IUserService userService)
+        {
+            var nullUser = new User { Id = ObjectId.GenerateNewId(), UserName = "Null", Password = "Null" };
+            if (!userService.Exists(nullUser.UserName))
+            {
+                userService.AddUser(nullUser);
+            }
+            var me = new User { Id = ObjectId.GenerateNewId(), UserName = "gxldcptrick", Password = "Not A Secure Password" };
+            if (!userService.Exists(me.UserName))
+            {
+                userService.AddUser(me);
+            }
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
