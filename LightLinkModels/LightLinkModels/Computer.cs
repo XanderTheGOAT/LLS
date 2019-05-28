@@ -10,12 +10,19 @@ namespace LightLinkModels
     {
         private string name;
         private string userName;
-        private string[] connectedDevices;
+        private List<string> connectedDevices;
 
         public ObjectId Id { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
         public string UserName { get => userName ?? ""; set => userName = value; }
-        public string[] ConnectedDevices { get => connectedDevices.ToArray(); set => connectedDevices = value; }
+        public List<string> ConnectedDevices { get => connectedDevices; set => connectedDevices = value; }
+
+        public Computer()
+        {
+            connectedDevices = new List<string>();
+            name = "";
+            userName = "";
+        }
 
         public override bool Equals(object obj)
         {

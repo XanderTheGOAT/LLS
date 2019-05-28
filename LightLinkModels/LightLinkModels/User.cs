@@ -18,6 +18,7 @@ namespace LightLinkModels
         public User()
         {
             Profiles = new List<Profile>();
+
         }
 
         public override bool Equals(object obj)
