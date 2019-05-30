@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace LightLinkModels
 {
@@ -41,6 +42,16 @@ namespace LightLinkModels
         public override int GetHashCode()
         {
             return this.Name.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder("Name: ").Append(Name);
+            foreach (var pair in Configurations)
+            {                
+                builder.Append("Device: ").Append(pair.Key).Append(" \\ Color: ").Append(pair.Value);
+            }
+            return builder.ToString();
         }
     }
 }
