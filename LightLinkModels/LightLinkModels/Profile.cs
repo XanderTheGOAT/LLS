@@ -8,8 +8,8 @@ namespace LightLinkModels
     public class Profile: IEquatable<Profile>
     {
         private string name;
-
         public ObjectId Id { get; set; }
+        public bool IsActive { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
         public IDictionary<string, dynamic> Configurations { get; set; }
 

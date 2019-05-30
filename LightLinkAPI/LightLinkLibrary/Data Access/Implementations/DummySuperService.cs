@@ -127,5 +127,15 @@ namespace LightLinkLibrary.Data_Access.Implementations
         {
             return computers.Any(c => c.Name == computername);
         }
+
+        public Profile GetActiveForUser(string username)
+        {
+            return users.FirstOrDefault(c => c.UserName == username)
+                .Profiles
+                .SingleOrDefault(p => p.IsActive)  ?? 
+                users.FirstOrDefault(c => c.UserName == username)
+                .Profiles
+                .FirstOrDefault();
+        }
     }
 }
