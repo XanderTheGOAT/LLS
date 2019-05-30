@@ -10,12 +10,12 @@ namespace LightLinkModels
     {
         private string name;
         private string userName;
-        private List<string> connectedDevices;
+        private ICollection<string> connectedDevices;
 
         public ObjectId Id { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
         public string UserName { get => userName ?? ""; set => userName = value; }
-        public List<string> ConnectedDevices { get => connectedDevices; set => connectedDevices = value; }
+        public ICollection<string> ConnectedDevices { get => connectedDevices; set => connectedDevices = value; }
 
         public Computer()
         {
