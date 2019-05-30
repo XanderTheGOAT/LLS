@@ -27,7 +27,7 @@ namespace LightLinkAPI.Controllers
         {
             return Ok(ComputerService.GetAllComputers());
         }
-        //GET ap/<controller>/unassigned
+        //GET api/<controller>/unassigned
         [HttpGet("unassigned")]
         public ActionResult GetUnassigned()
         {

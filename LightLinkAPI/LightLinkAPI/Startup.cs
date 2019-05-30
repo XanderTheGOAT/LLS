@@ -32,7 +32,7 @@ namespace LightLinkAPI
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            var service = new MongoSuperService("69.27.22.253");
+            var service = new DummySuperService(); // new MongoSuperService("69.27.22.253");
             var userService = new HashingUserService(service);
             services.AddSingleton<IUserService>((c) => userService);
             services.AddSingleton<IProfileService>((c) => service);
