@@ -9,9 +9,14 @@ namespace LightLinkLibrary.Data_Access.Implementations
     public class MongoSuperService : IComputerService, IProfileService, IUserService
     {
         private readonly MongoClient client;
-        public MongoSuperService(string mongoConnetionString = "mongodb://localhost:27017")
+        private static readonly string mongoConnectionTemplate;
+        static MongoSuperService()
         {
-            client = new MongoClient(mongoConnetionString);
+            mongoConnectionTemplate = "mongodb://{0}:27017";
+        }
+        public MongoSuperService(string host="localhost")
+        {
+            client = new MongoClient(String.Format(mongoConnectionTemplate, host));
         }
         public void AddComputer(Computer dto)
         {

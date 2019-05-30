@@ -46,11 +46,12 @@ namespace LightLinkModels
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder("Name: ").Append(Name);
+            StringBuilder builder = new StringBuilder(" { Name: ").Append(Name);
             foreach (var pair in Configurations)
             {                
-                builder.Append("Device: ").Append(pair.Key).Append(" \\ Color: ").Append(pair.Value);
+                builder.Append(", Device: ").Append(pair.Key).Append(", Color: ").Append(pair.Value);
             }
+            builder.Append(" }");
             return builder.ToString();
         }
     }
