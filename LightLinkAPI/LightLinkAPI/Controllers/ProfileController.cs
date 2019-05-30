@@ -18,7 +18,7 @@ namespace LightLinkAPI.Controllers
             ProfileService = profileService;
         }
 
-        // GET api/Profile/username/
+        // GET api/Profile/gxldcptrick/
         [HttpGet("{username}")]
         public ActionResult Get(string username)
         {
@@ -29,7 +29,7 @@ namespace LightLinkAPI.Controllers
 
             return Ok(ProfileService.GetProfilesForUser(username));
         }
-
+        // GET api/Profile/active/gxldcptrick
         [HttpGet("active/{username}")]
         public ActionResult GetActive(string username)
         {

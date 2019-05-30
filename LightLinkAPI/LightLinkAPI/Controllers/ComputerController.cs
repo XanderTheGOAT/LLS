@@ -27,14 +27,14 @@ namespace LightLinkAPI.Controllers
         {
             return Ok(ComputerService.GetAllComputers());
         }
-
+        //GET ap/<controller>/unassigned
         [HttpGet("unassigned")]
         public ActionResult GetUnassigned()
         {
             return Ok(ComputerService.GetAllUnAssignedComputers());
         }
 
-        // GET api/<controller>/5
+        // GET api/<controller>/gxldcptrick
         [HttpGet("{username}")]
         public ActionResult Get(string username)
         {
@@ -51,7 +51,7 @@ namespace LightLinkAPI.Controllers
             return Ok();
         }
 
-        // PUT api/<controller>/5
+        // PUT api/<controller>/DESKTOPKVG-3232
         [HttpPut("{computername}")]
         public ActionResult Put(string computername, [FromBody]Computer value)
         {
@@ -60,7 +60,7 @@ namespace LightLinkAPI.Controllers
             return Ok();
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/<controller>/DESKTOPKVG-3232
         [HttpDelete("{computername}")]
         public ActionResult Delete(string computername)
         {
