@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace LightLinkModels
         private string userName;
         private List<string> connectedDevices;
 
+        [JsonIgnore]
         public ObjectId Id { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
         public string UserName { get => userName ?? ""; set => userName = value; }

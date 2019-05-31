@@ -1,5 +1,6 @@
 ﻿using LightLinkModels.Extension_Methods;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace LightLinkModels
     public class Profile: IEquatable<Profile>
     {
         private string name;
+        [JsonIgnore]
         public ObjectId Id { get; set; }
         public bool IsActive { get; set; }
         public string Name { get => name ?? ""; set => name = value; }

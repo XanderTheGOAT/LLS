@@ -1,5 +1,6 @@
 ﻿using LightLinkModels.Extension_Methods;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace LightLinkModels
     {
         private string userName;
         private string password;
-
+        [JsonIgnore]
         public ObjectId Id { get; set; }
         public string UserName { get => userName ?? ""; set => userName = value; }
         public string Password { get => password ?? ""; set => password = value; }
