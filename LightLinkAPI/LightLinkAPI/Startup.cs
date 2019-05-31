@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace LightLinkAPI
 {
@@ -40,11 +41,25 @@ namespace LightLinkAPI
             {
                 userService.AddUser(nullUser);
             }
-            var me = new User { Id = ObjectId.GenerateNewId(), UserName = "gxldcptrick", Password = "Not A Secure Password" };
+            var me = new User { Id = ObjectId.GenerateNewId(), UserName = "gxldcptrick", Password = "Not A Secure Password", Profiles = new List<Profile>() {
+                GenerateProfile()
+            } };
             if (!userService.Exists(me.UserName))
             {
                 userService.AddUser(me);
             }
+        }
+
+
+        private static int count = 1;
+        private Profile GenerateProfile()
+        {
+            string name = "account " + count;
+            Profile profile = new Profile();
+            profile.IsActive = true;
+            profile.Name = name;
+            profile.Configurations = new Dictionary<string, dynamic>();
+            return profile;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

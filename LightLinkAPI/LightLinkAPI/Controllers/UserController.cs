@@ -1,5 +1,6 @@
 ﻿using LightLinkLibrary.Data_Access;
 using LightLinkModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace LightLinkAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController: ControllerBase
     {
         public IUserService UserService { get; private set; }
+        public ILoginAuthenticator AuthenticatorService { get; private set; }
 
         public UserController(IUserService userService)
         {
@@ -62,6 +65,15 @@ namespace LightLinkAPI.Controllers
             if (!UserService.Exists(username)) return BadRequest(new { error = "no user exists by that name." });
             UserService.DeleteUser(username);
             return Ok();
+        }
+        
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] UserLogin logInfo)
+        {
+            if (logInfo is null) return BadRequest(new { error = "No login given" });
+            bool isValid = AuthenticatorService.Authenticate(logInfo);
+            return Ok(isValid);
         }
     }
 }
