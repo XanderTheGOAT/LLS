@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LightLinkAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="User")]
     [Route("api/[controller]")]
     public class ComputerController : Controller
     {

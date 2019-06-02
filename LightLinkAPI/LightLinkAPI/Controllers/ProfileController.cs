@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LightLinkAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ControllerBase
