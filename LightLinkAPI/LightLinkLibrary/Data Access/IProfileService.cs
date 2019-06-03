@@ -11,5 +11,6 @@ namespace LightLinkLibrary.Data_Access
         void UpdateProfileOnUser(string username, string name, Profile dto);
         bool Exists(string username, string name);
         Profile GetActiveForUser(string username);
+        void SetActiveForUser(string username, Profile dto);
     }
 }

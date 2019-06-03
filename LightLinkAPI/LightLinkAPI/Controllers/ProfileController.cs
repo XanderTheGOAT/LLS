@@ -46,6 +46,18 @@ namespace LightLinkAPI.Controllers
             }
         }
 
+        [HttpPost("activate/{username}")]
+        public ActionResult SetActiveProfile(string username, [FromBody] Profile value)
+        {
+            if (!UserService.Exists(username))
+            {
+                return BadRequest(new { error = "user by that username was not found." });
+            }
+
+            ProfileService.SetActiveForUser(username, value);
+            return Ok();
+        }
+
         // POST api/values
         [HttpPost("{username}")]
         public ActionResult Post(string username, [FromBody] Profile value)

@@ -14,7 +14,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
         {
             mongoConnectionTemplate = "mongodb://{0}:27017";
         }
-        public MongoSuperService(string host="localhost")
+        public MongoSuperService(string host = "localhost")
         {
             client = new MongoClient(String.Format(mongoConnectionTemplate, host));
         }
@@ -233,6 +233,21 @@ namespace LightLinkLibrary.Data_Access.Implementations
         public Profile GetActiveForUser(string username)
         {
             return GetProfilesForUser(username).SingleOrDefault(p => p.IsActive);
+        }
+
+        public void SetActiveForUser(string username, Profile dto)
+        {
+            foreach (Profile p in GetUserById(username).Profiles)
+            {
+                if (p.Equals(dto))
+                {
+                    p.IsActive = true;
+                }
+                else
+                {
+                    p.IsActive = false;
+                }
+            }
         }
     }
 }
