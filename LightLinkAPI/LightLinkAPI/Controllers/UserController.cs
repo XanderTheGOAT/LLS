@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 
 namespace LightLinkAPI.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "UserPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         public IUserService UserService { get; private set; }
         public ILoginAuthenticator AuthenticatorService { get; private set; }
+        public  string Secret { get; private set; } = "ITS A FUCKING SECRET ALEX GOD GIT BETTER";
 
         public UserController(IUserService userService, ILoginAuthenticator authenticatorService)
         {
@@ -80,7 +82,7 @@ namespace LightLinkAPI.Controllers
             var user = AuthenticatorService.Authenticate(logInfo);
             if (user is null) return BadRequest(new { error = "invalid credentials no user found." });
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("ITS A FUCKING SECRET ALEX GOD GIT BETTER");
+            var key = Encoding.UTF8.GetBytes(Secret);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new Claim[] 
@@ -93,7 +95,6 @@ namespace LightLinkAPI.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-
             return Ok(new
             {
                 UserName = logInfo.Username,

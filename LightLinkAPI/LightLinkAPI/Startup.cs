@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace LightLinkAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -37,20 +39,31 @@ namespace LightLinkAPI
             services.AddSingleton<IComputerService>((c) => service);
             services.AddSingleton<ILoginAuthenticator>((c) => secureService);
             SeedUsers(secureService);
+            services.AddAuthorization((config) =>
+            {
+                config.AddPolicy("UserPolicy", (builder) =>
+                {
+                    builder.RequireRole("User");
+                });
+            });
             services.AddAuthentication((config) => 
             {
+                config.DefaultScheme =  JwtBearerDefaults.AuthenticationScheme;
                 config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer((config) => 
             {
                 config.Events = new JwtBearerEvents
                 {
+                    OnAuthenticationFailed = context => 
+                    {
+                        return Task.CompletedTask;
+                    },
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = context.Principal.Identity.Name;
                         var user = userService.GetUserById(userId);
-                        System.Console.WriteLine("Thing");
                         if (user == null)
                         {
                             context.Fail("Unauthorized");
@@ -114,6 +127,8 @@ namespace LightLinkAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
