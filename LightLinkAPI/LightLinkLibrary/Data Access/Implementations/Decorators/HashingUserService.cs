@@ -6,11 +6,13 @@ using LightLinkModels;
 
 namespace LightLinkLibrary.Data_Access.Implementations.Decorators
 {
-    public class HashingUserService : AbstractUserServiceDecorator
+    public class HashingUserService : AbstractUserServiceDecorator, ILoginAuthenticator
     {
-        public HashingUserService(IUserService service): base(service)
-        {}
-
+        private ILoginAuthenticator Authenticator { get; set; }
+        public HashingUserService(IUserService service, ILoginAuthenticator authenticator): base(service)
+        {
+            Authenticator = authenticator;
+        }
         private string HashPassword(string password)
         {
             var hashed = default(byte[]);
@@ -32,6 +34,12 @@ namespace LightLinkLibrary.Data_Access.Implementations.Decorators
         {
             dto.Password = HashPassword(dto.Password);
             Service.UpdateUser(id, dto);
+        }
+
+        public User Authenticate(UserLogin logInfo)
+        {
+            logInfo.Password = HashPassword(logInfo.Password);
+            return Authenticator.Authenticate(logInfo);
         }
     }
 }

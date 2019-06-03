@@ -2,13 +2,17 @@ using LightLinkLibrary.Data_Access;
 using LightLinkLibrary.Data_Access.Implementations;
 using LightLinkLibrary.Data_Access.Implementations.Decorators;
 using LightLinkModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LightLinkAPI
 {
@@ -26,12 +30,44 @@ namespace LightLinkAPI
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            var service = new MongoSuperService("73.228.93.213");
-            var userService = new HashingUserService(service);
-            services.AddSingleton<IUserService>((c) => userService);
+            var service = new DummySuperService();
+            var secureService = new HashingUserService(service, service);
+            services.AddSingleton<IUserService>((c) => secureService);
             services.AddSingleton<IProfileService>((c) => service);
             services.AddSingleton<IComputerService>((c) => service);
-            SeedUsers(userService);
+            services.AddSingleton<ILoginAuthenticator>((c) => secureService);
+            SeedUsers(secureService);
+            services.AddAuthentication((config) => 
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer((config) => 
+            {
+                config.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userId = context.Principal.Identity.Name;
+                        var user = userService.GetUserById(userId);
+                        System.Console.WriteLine("Thing");
+                        if (user == null)
+                        {
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ITS A FUCKING SECRET ALEX GOD GIT BETTER")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         private void SeedUsers(IUserService userService)
@@ -55,7 +91,7 @@ namespace LightLinkAPI
         private Profile GenerateProfile()
         {
             string name = "account " + count;
-            Profile profile = new Profile();
+            var profile = new Profile();
             profile.IsActive = true;
             profile.Name = name;
             profile.Configurations = new Dictionary<string, dynamic>();

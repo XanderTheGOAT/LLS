@@ -21,9 +21,10 @@ namespace LightLinkAPI.Controllers
         public IUserService UserService { get; private set; }
         public ILoginAuthenticator AuthenticatorService { get; private set; }
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILoginAuthenticator authenticatorService)
         {
             UserService = userService;
+            AuthenticatorService = authenticatorService;
         }
         // GET api/User
         [HttpGet]
@@ -76,13 +77,17 @@ namespace LightLinkAPI.Controllers
         public IActionResult Authenticate([FromBody] UserLogin logInfo)
         {
             if (logInfo is null) return BadRequest(new { error = "No login given" });
-            bool isValid = AuthenticatorService.Authenticate(logInfo);
-            if (isValid is false) return BadRequest(new { error = "Username or Password is incorrect" });
+            var user = AuthenticatorService.Authenticate(logInfo);
+            if (user is null) return BadRequest(new { error = "invalid credentials no user found." });
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(logInfo.Username);
+            var key = Encoding.ASCII.GetBytes("ITS A FUCKING SECRET ALEX GOD GIT BETTER");
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, logInfo.Username) }),
+                Subject = new ClaimsIdentity(new Claim[] 
+                {
+                    new Claim(ClaimTypes.Name, logInfo.Username),
+                    new Claim(ClaimTypes.Role, "User")
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -92,6 +97,7 @@ namespace LightLinkAPI.Controllers
             return Ok(new
             {
                 UserName = logInfo.Username,
+                Token = tokenString
             });
         }
     }

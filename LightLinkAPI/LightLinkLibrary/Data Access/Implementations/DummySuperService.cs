@@ -137,5 +137,10 @@ namespace LightLinkLibrary.Data_Access.Implementations
                 .Profiles
                 .FirstOrDefault();
         }
+
+        public User Authenticate(UserLogin logInfo)
+        {
+            return users.FirstOrDefault(u => u.UserName == logInfo.Username && u.Password == logInfo.Password);
+        }
     }
 }
