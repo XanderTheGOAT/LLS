@@ -227,11 +227,12 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public User Authenticate(UserLogin logInfo)
         {
-            throw new NotImplementedException();
+            return GetAllUsers().SingleOrDefault(u => u.Password == logInfo.Password && u.UserName == logInfo.Username);
         }
+
         public Profile GetActiveForUser(string username)
         {
-            throw new NotImplementedException("You got this ben");
+            return GetProfilesForUser(username).SingleOrDefault(p => p.IsActive);
         }
     }
 }
