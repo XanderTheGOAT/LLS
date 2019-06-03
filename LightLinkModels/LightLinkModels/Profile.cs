@@ -14,6 +14,7 @@ namespace LightLinkModels
         public ObjectId Id { get; set; }
         public bool IsActive { get; set; }
         public string Name { get => name ?? ""; set => name = value; }
+        public DateTime Created { get; set; }
         public IDictionary<string, dynamic> Configurations { get; set; }
 
         public Profile()

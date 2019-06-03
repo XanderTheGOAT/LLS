@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LightLinkLibrary.Data_Access.Implementations
 {
-    public class DummySuperService : IComputerService, IProfileService, IUserService
+    public class DummySuperService : IComputerService, IProfileService, IUserService, ILoginAuthenticator
     {
         private ICollection<Computer> computers;
         private ICollection<Profile> profiles;

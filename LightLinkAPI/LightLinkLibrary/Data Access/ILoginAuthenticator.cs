@@ -7,6 +7,6 @@ namespace LightLinkLibrary.Data_Access
 {
     public interface ILoginAuthenticator
     {
-        bool Authenticate(UserLogin logInfo);
+        User Authenticate(UserLogin logInfo);
     }
 }

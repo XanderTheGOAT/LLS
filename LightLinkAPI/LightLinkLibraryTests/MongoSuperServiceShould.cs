@@ -10,6 +10,8 @@ namespace LightLinkLibraryTests
     [TestClass]
     public class MongoSuperServiceShould
     {
+        private const string MongoTestIP = "69.27.22.253";
+
         [TestMethod]
         public void TestAddComputer()
         {
@@ -17,10 +19,10 @@ namespace LightLinkLibraryTests
             {
                 Name = "Cotton Eye Joe",
                 UserName = "Joe",
-                ConnectedDevices = new string[] { "Beep", "Boop" }.ToList()
+                ConnectedDevices = new string[] { "Beep", "Boop" }
             };
 
-            var mss = new MongoSuperService("69.27.22.253");
+            var mss = new MongoSuperService(MongoTestIP);
             mss.AddComputer(c);
         }
 
@@ -34,14 +36,14 @@ namespace LightLinkLibraryTests
                 Profiles = new List<Profile>()
             };
 
-            var mss = new MongoSuperService("69.27.22.253");
+            var mss = new MongoSuperService(MongoTestIP);
             mss.AddUser(u);
         }
 
         [TestMethod]
         public void TestAddProfileToUser()
         {
-            var mss = new MongoSuperService("69.27.22.253");
+            var mss = new MongoSuperService(MongoTestIP);
             var p = new Profile
             {
                 Name = "Rainbow",
@@ -64,14 +66,14 @@ namespace LightLinkLibraryTests
         [TestMethod]
         public void TestBenExists()
         {
-            var mss = new MongoSuperService("69.27.22.253");
+            var mss = new MongoSuperService(MongoTestIP);
             Assert.IsTrue(mss.Exists("Ben"));
         }
 
         [TestMethod]
         public void TestJohnDoesNotExist()
         {
-            var mss = new MongoSuperService("69.27.22.253");
+            var mss = new MongoSuperService(MongoTestIP);
             Assert.IsFalse(mss.Exists("John"));
         }
 
@@ -79,7 +81,7 @@ namespace LightLinkLibraryTests
         public void GiveUserIfUserExists()
         {
             AddUserToDatabase("joe");
-            var sut = new MongoSuperService("69.27.22.253");
+            var sut = new MongoSuperService(MongoTestIP);
             var actual = sut.GetUserById("joe");
             actual.Should().NotBeNull(because: "User is in the database.");
             actual.UserName.Should().NotBeNull(because: "It is requried to be stored in the database.");
@@ -89,7 +91,7 @@ namespace LightLinkLibraryTests
         [TestMethod]
         public void GiveNullIfUserDoesNotExist()
         {
-            var sut = new MongoSuperService("69.27.22.253");
+            var sut = new MongoSuperService(MongoTestIP);
             var actual = sut.GetUserById("jilly");
             actual.Should().BeNull(because: "User does not exist.");
         }
@@ -99,7 +101,7 @@ namespace LightLinkLibraryTests
         {
             var collection = new Profile[] { new Profile { Name = "The Very Best Shit." } };
             AddUserToDatabase("alex", values: collection);
-            var sut = new MongoSuperService("69.27.22.253");
+            var sut = new MongoSuperService(MongoTestIP);
             var actual = sut.GetProfilesForUser("alex");
             actual.Should().BeEquivalentTo(collection);
         }
@@ -107,7 +109,7 @@ namespace LightLinkLibraryTests
 
         private void AddUserToDatabase(string username, string password = "Not A God", params Profile[] values)
         {
-            var sut = new MongoSuperService("69.27.22.253");
+            var sut = new MongoSuperService(MongoTestIP);
             if (!sut.GetAllUsers().Any(c => c.UserName == username))
             {
                 sut.AddUser(new User()

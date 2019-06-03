@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LightLinkLibrary.Data_Access.Implementations
 {
-    public class MongoSuperService : IComputerService, IProfileService, IUserService
+    public class MongoSuperService : IComputerService, IProfileService, IUserService, ILoginAuthenticator
     {
         private readonly MongoClient client;
         private static readonly string mongoConnectionTemplate;
@@ -83,11 +83,6 @@ namespace LightLinkLibrary.Data_Access.Implementations
         {
             var profileList = GetProfilesForUser(username);
             return profileList.Count() >= 1;
-        }
-
-        public Profile GetActiveForUser(string username)
-        {
-            throw new NotImplementedException("You got this ben");
         }
 
         public IEnumerable<Computer> GetAllComputers()
@@ -228,6 +223,15 @@ namespace LightLinkLibrary.Data_Access.Implementations
             var filter = new FilterDefinitionBuilder<User>();
 
             collection.ReplaceOne(filter.Where(u => u.UserName == id), dto);
+        }
+
+        public User Authenticate(UserLogin logInfo)
+        {
+            throw new NotImplementedException();
+        }
+        public Profile GetActiveForUser(string username)
+        {
+            throw new NotImplementedException("You got this ben");
         }
     }
 }
