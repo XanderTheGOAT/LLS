@@ -78,7 +78,8 @@ namespace LightLinkAPI
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ITS A FUCKING SECRET ALEX GOD GIT BETTER")),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = true
                 };
             });
         }

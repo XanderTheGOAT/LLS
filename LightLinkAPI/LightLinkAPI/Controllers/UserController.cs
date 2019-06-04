@@ -90,7 +90,7 @@ namespace LightLinkAPI.Controllers
                     new Claim(ClaimTypes.Name, logInfo.Username),
                     new Claim(ClaimTypes.Role, "User")
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMilliseconds(100),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
