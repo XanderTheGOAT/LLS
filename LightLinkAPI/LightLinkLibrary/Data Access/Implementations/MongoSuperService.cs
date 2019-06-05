@@ -180,6 +180,10 @@ namespace LightLinkLibrary.Data_Access.Implementations
             Profile p = user.Profiles.SingleOrDefault(p => p.Name == name);
 
             user.Profiles.Remove(p);
+
+            var collection = client.GetDatabase("LightLinkProfiles").GetCollection<User>("User");
+            var filterBuilder = new FilterDefinitionBuilder<User>();
+            collection.ReplaceOne(filterBuilder.Where((u) => u.UserName == username), user);
         }
 
         public void UpdateComputer(string computerName, Computer dto)
