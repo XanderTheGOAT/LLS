@@ -186,10 +186,9 @@ namespace LightLinkLibrary.Data_Access.Implementations
         public void UpdateComputer(string computerName, Computer dto)
         {
             var db = client.GetDatabase("LightLinkProfiles");
-
             var collection = db.GetCollection<Computer>("Computer");
-
             var filter = new FilterDefinitionBuilder<Computer>();
+            dto.Id = collection.Find((c) => c.Name == dto.Name).First().Id;
 
             collection.ReplaceOne(filter.Where(c => c.Name == computerName), dto);
         }
