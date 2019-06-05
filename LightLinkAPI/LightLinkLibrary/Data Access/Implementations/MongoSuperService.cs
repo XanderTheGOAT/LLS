@@ -237,17 +237,15 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public void SetActiveForUser(string username, Profile dto)
         {
-            foreach (Profile p in GetUserById(username).Profiles)
+            var db = client.GetDatabase("LightLinkProfiles");
+            var collection = db.GetCollection<User>("User");
+            var user = collection.Find((u) => u.UserName == username).FirstOrDefault();
+            var filterDefinition = new FilterDefinitionBuilder<User>();
+            foreach (var profile in user.Profiles)
             {
-                if (p.Equals(dto))
-                {
-                    p.IsActive = true;
-                }
-                else
-                {
-                    p.IsActive = false;
-                }
+                profile.IsActive = profile.Name == dto.Name;
             }
+            collection.ReplaceOne(filterDefinition.Where(u => u.UserName == username), user);
         }
     }
 }
