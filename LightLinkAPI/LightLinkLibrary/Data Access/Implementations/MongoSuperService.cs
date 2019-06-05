@@ -39,11 +39,10 @@ namespace LightLinkLibrary.Data_Access.Implementations
             var filter = new FilterDefinitionBuilder<User>();
 
             var builder = new UpdateDefinitionBuilder<User>();
-
-            if (!GetProfilesForUser(username).Contains(dto))
-            {
-                collection.UpdateOne(filter.Where(u => u.UserName == username), builder.AddToSet("Profiles", dto));
-            }
+            var user = collection.Find((u) => u.UserName == username).Single();
+            user.Profiles.Add(dto);
+            var filterBuilder = new FilterDefinitionBuilder<User>();
+            collection.ReplaceOne(filterBuilder.Where((u) => u.UserName == username), user);
         }
 
         public void AddUser(User dto)
