@@ -142,5 +142,10 @@ namespace LightLinkLibrary.Data_Access.Implementations
         {
             return users.FirstOrDefault(u => u.UserName == logInfo.Username && u.Password == logInfo.Password);
         }
+
+        public void SetActiveForUser(string username, Profile dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
