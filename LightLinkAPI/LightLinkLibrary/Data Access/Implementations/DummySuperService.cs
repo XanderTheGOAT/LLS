@@ -17,7 +17,6 @@ namespace LightLinkLibrary.Data_Access.Implementations
             computers = new HashSet<Computer>(new ComputerEqualityComparer());
             profiles = new List<Profile>();
             users = new HashSet<User>();
-            
         }
 
         public void AddComputer(Computer dto)
@@ -42,7 +41,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public void DeleteUser(string username)
         {
-            
+
             users.Remove(new User { UserName = username });
         }
 
@@ -132,7 +131,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
         {
             return users.FirstOrDefault(c => c.UserName == username)
                 .Profiles
-                .SingleOrDefault(p => p.IsActive)  ?? 
+                .SingleOrDefault(p => p.IsActive) ??
                 users.FirstOrDefault(c => c.UserName == username)
                 .Profiles
                 .FirstOrDefault();
@@ -140,7 +139,17 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public User Authenticate(UserLogin logInfo)
         {
-            return users.FirstOrDefault(u => u.UserName == logInfo.Username && u.Password == logInfo.Password);
+            foreach (var u in users)
+            {
+                var a = (u.UserName == logInfo.Username);
+                var b = (u.Password == logInfo.Password);
+                if (u.UserName == logInfo.Username && u.Password == logInfo.Password)
+                {
+                    return u;
+                }
+
+            }
+            return null;
         }
 
         public void SetActiveForUser(string username, Profile dto)
