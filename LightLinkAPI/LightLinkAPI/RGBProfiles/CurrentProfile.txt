@@ -1,1 +1,1 @@
-{"IsActive":true,"Name":"Default Profile","Created":"0001-01-01T00:00:00","Configurations":{"mouse":"red"}}
+{"IsActive":true,"Name":"Green","Created":"0001-01-01T00:00:00","Configurations":{"mouse":"00ffff"}}

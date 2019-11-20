@@ -139,17 +139,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public User Authenticate(UserLogin logInfo)
         {
-            foreach (var u in users)
-            {
-                var a = (u.UserName == logInfo.Username);
-                var b = (u.Password == logInfo.Password);
-                if (u.UserName == logInfo.Username && u.Password == logInfo.Password)
-                {
-                    return u;
-                }
-
-            }
-            return null;
+            return users.FirstOrDefault(u=>u.UserName == logInfo.Username && u.Password == logInfo.Password);
         }
 
         public void SetActiveForUser(string username, Profile dto)

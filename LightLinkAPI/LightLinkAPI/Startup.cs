@@ -22,7 +22,7 @@ namespace LightLinkAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
         }
 
         public IConfiguration Configuration { get; }
@@ -32,13 +32,12 @@ namespace LightLinkAPI
         {
             services.AddControllers()
                 .AddNewtonsoftJson();
-            var service = new MongoSuperService("73.228.93.213");
-            var secureService = new HashingUserService(service, service);
-            services.AddSingleton<IUserService>((c) => secureService);
-            services.AddSingleton<IProfileService>((c) => service);
+            var service = new DummySuperService();
+            services.AddSingleton<IUserService>((c) => service);
+            services.AddSingleton<IProfileService>((c) => new FileProfileService());
             services.AddSingleton<IComputerService>((c) => service);
-            services.AddSingleton<ILoginAuthenticator>((c) => secureService);
-            SeedUsers(secureService);
+            services.AddSingleton<ILoginAuthenticator>((c) => service);
+            SeedUsers(service);
             services.AddAuthorization((config) =>
             {
                 config.AddPolicy("UserPolicy", (builder) =>
@@ -46,16 +45,16 @@ namespace LightLinkAPI
                     builder.RequireRole("User");
                 });
             });
-            services.AddAuthentication((config) => 
+            services.AddAuthentication((config) =>
             {
-                config.DefaultScheme =  JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer((config) => 
+            }).AddJwtBearer((config) =>
             {
                 config.Events = new JwtBearerEvents
                 {
-                    OnAuthenticationFailed = context => 
+                    OnAuthenticationFailed = context =>
                     {
                         return Task.CompletedTask;
                     },
@@ -91,12 +90,32 @@ namespace LightLinkAPI
             {
                 userService.AddUser(nullUser);
             }
-            var me = new User { Id = ObjectId.GenerateNewId(), UserName = "gxldcptrick", Password = "Not A Secure Password", Profiles = new List<Profile>() {
+            var me = new User
+            {
+                Id = ObjectId.GenerateNewId(),
+                UserName = "gxldcptrick",
+                Password = "Not A Secure Password",
+                Profiles = new List<Profile>() {
                 GenerateProfile()
-            } };
+            }
+            };
+
+            var otherme = new User
+            {
+                Id = ObjectId.GenerateNewId(),
+                UserName = "user",
+                Password = "pass",
+                Profiles = new List<Profile>() {
+                GenerateProfile()
+            }
+            };
             if (!userService.Exists(me.UserName))
             {
                 userService.AddUser(me);
+            }
+            if (!userService.Exists(otherme.UserName))
+            {
+                userService.AddUser(otherme);
             }
         }
 
@@ -132,7 +151,6 @@ namespace LightLinkAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

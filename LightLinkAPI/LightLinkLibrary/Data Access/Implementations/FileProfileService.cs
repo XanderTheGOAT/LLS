@@ -26,8 +26,11 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public void AddProfileToUser(string username, Profile dto)
         {
-            profiles.Add(dto);
-            Serialize(profiles, PROFILES_FILE);
+            if (!Exists(null, dto.Name) && !String.IsNullOrEmpty(dto.Name))
+            {
+                profiles.Add(dto);
+                Serialize(profiles, PROFILES_FILE);
+            }
         }
 
         public bool Exists(string username, string name)
@@ -38,7 +41,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public Profile GetActiveForUser(string username)
         {
-            return currentProfile;
+            return ((Newtonsoft.Json.Linq.JToken)Deserialize(CURRENT_PROFILE_NAME)).ToObject<Profile>();
         }
 
         public IEnumerable<Profile> GetProfilesForUser(string username)
@@ -55,22 +58,29 @@ namespace LightLinkLibrary.Data_Access.Implementations
 
         public void SetActiveForUser(string username, Profile dto)
         {
-
-            currentProfile.IsActive = false;
             profiles[profiles.IndexOf(currentProfile)].IsActive = false;
             dto.IsActive = true;
             profiles[profiles.IndexOf(dto)].IsActive = true;
+            currentProfile = dto;
             Serialize(dto, CURRENT_PROFILE_NAME);
+            Serialize(profiles, PROFILES_FILE);
         }
 
         public void UpdateProfileOnUser(string username, string name, Profile dto)
         {
             var updatingProfile = profiles.FirstOrDefault(p => p.Name.Equals(name));
+            if(name.Equals(currentProfile.Name))
+            {
+                Serialize(dto, CURRENT_PROFILE_NAME);
+                currentProfile = dto;
+            }
             profiles[profiles.IndexOf(updatingProfile)] = dto;
+            Serialize(profiles, PROFILES_FILE);
         }
 
         private void CheckForFiles()
         {
+            if (!Directory.Exists("RGBProfiles")) Directory.CreateDirectory("RGBProfiles");
             if (!File.Exists(PROFILES_FILE))
             {
                 var stream = File.Create(PROFILES_FILE);
@@ -78,7 +88,7 @@ namespace LightLinkLibrary.Data_Access.Implementations
                 currentProfile = new Profile();
                 currentProfile.Name = "Default Profile";
                 currentProfile.Configurations = new Dictionary<string, dynamic>();
-                currentProfile.Configurations.Add("mouse", "red");
+                currentProfile.Configurations.Add("mouse", "ffff0000");
                 currentProfile.IsActive = true;
                 List<Profile> profiles = new List<Profile>();
                 profiles.Add(currentProfile);
