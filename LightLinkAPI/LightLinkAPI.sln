@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightLinkAPI", "LightLinkAP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightLinkServerlessAPI", "LightLinkServerlessAPI\LightLinkServerlessAPI.csproj", "{B50D00E6-3026-413C-BB85-D37858EA30E1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightLinkDLL", "..\..\LLD\LightLinkDLL\LightLinkDLL\LightLinkDLL.csproj", "{69124FC3-2CC2-4CB3-9980-FFD2FFFE323E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorsairSDK", "..\..\LLD\DeviceSDKs\CorsairSDK\CorsairSDK.csproj", "{93A4CC30-7A39-4E51-937C-97CF573E8CD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B50D00E6-3026-413C-BB85-D37858EA30E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B50D00E6-3026-413C-BB85-D37858EA30E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B50D00E6-3026-413C-BB85-D37858EA30E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69124FC3-2CC2-4CB3-9980-FFD2FFFE323E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69124FC3-2CC2-4CB3-9980-FFD2FFFE323E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69124FC3-2CC2-4CB3-9980-FFD2FFFE323E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69124FC3-2CC2-4CB3-9980-FFD2FFFE323E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93A4CC30-7A39-4E51-937C-97CF573E8CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A4CC30-7A39-4E51-937C-97CF573E8CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A4CC30-7A39-4E51-937C-97CF573E8CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A4CC30-7A39-4E51-937C-97CF573E8CD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
